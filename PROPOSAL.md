@@ -5,7 +5,7 @@
 [pgnmentor]: http://www.pgnmentor.com/files.html "pgnmentor"
 [365chess]: https://www.365chess.com/opening.php "365chess"
 [stockfish]: https://stockfishchess.org/download/ "Stockfish"
-Given a database of PGN files of chess games, provide an interface to load all the games and play a series of moves, then see which games in the database had that sequence.
+Given a database of PGN files of chess games, provide an interface to load all the games and play a series of moves on a digital chessboard, then see which games in the database had that sequence, and be able to look up information about those games.
 PGN files look like the following:
 > [Event "Match 3"]
 > [Site "London ENG"]
