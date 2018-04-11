@@ -1,9 +1,9 @@
 # Project Proposal
 ## Chess Opening Explorer
 
-[pgnlib] http://pgnlib.sourceforge.net/ "pgnlib"
-[pgnmentor] http://www.pgnmentor.com/files.html "pgnmentor"
-[365chess] https://www.365chess.com/opening.php "365chess"
+[pgnlib]: http://pgnlib.sourceforge.net/ "pgnlib"
+[pgnmentor]: http://www.pgnmentor.com/files.html "pgnmentor"
+[365chess]: https://www.365chess.com/opening.php "365chess"
 Given a database of PGN files of chess games, provide an interface to load all the games and play a series of moves, then see which games in the database had that sequence.
 PGN files look like the following:
 > [Event "Match 3"]
