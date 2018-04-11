@@ -4,6 +4,7 @@
 [pgnlib]: http://pgnlib.sourceforge.net/ "pgnlib"
 [pgnmentor]: http://www.pgnmentor.com/files.html "pgnmentor"
 [365chess]: https://www.365chess.com/opening.php "365chess"
+[stockfish]: https://stockfishchess.org/download/ "Stockfish"
 Given a database of PGN files of chess games, provide an interface to load all the games and play a series of moves, then see which games in the database had that sequence.
 PGN files look like the following:
 > [Event "Match 3"]
@@ -24,9 +25,9 @@ PGN files look like the following:
 > 33.Qe5 Rg5 34.f7+ Rxe5 35.f8=Q+ Rxf8 36.Rxf8# 1-0
 
 #### Libraries/Resources
-There is a library for parsing through PGN files called [pgnlib], which can be used to generate c++ classes corresponding to moves, positions, squares, etc... I will use this, and possibly design a tree data structure in order to load the games into memory in a way that is usable. Large databases of PGN files, containing thousands of high level games are readily available, for example at [pgnmentor]. 
+There is a library for parsing through PGN files called [pgnlib], which can be used to generate C++ objects corresponding to moves, positions, squares, etc... I will use this, and possibly design a tree data structure in order to load the games into memory in a way that is usable. Large databases of PGN files, containing thousands of high level games are readily available, for example at [pgnmentor]. 
 #### Design
 The application window will contain a chessboard where the user can play moves. On the side of the board, there will be a table which shows the most common moves, their probabilities, and the outcomes of the games with those probabilities (white win, draw, black win). This should replicate an opening explorer like ones available at websites such as [365chess], but for custom databases.
-I can potentially use a custom-made tree, where nodes represent moves and each node has a vector of subtrees which represent all the possible moves that can be made from a certain position. The nodes will hold the statistics for the current position (games played, white wins, draws, black wins) so the data can quickly be looked up at any time.
+I can potentially use a custom-made tree, where nodes represent moves and each node has a vector of subtrees which represent all the possible moves that can be made from a certain position. The nodes will hold the statistics for the current position (games played, white wins, draws, black wins) so the data can quickly be looked up at any time. I could also attempt to integrate an open-source chess engine such as [stockfish], which is written in C++, into my app to allow an engine to give an objective evaluation of a position as well.
 #### Potential Issues
-Potential difficulties with this approach include transpositions (where the same position arises from different move orders), which would cause issues with my data structure. Also, making the chessboard itself respond to user input in a way that feels natural may be difficult to do (clicking and dragging pieces? clicking piece to move and destination square? selecting a move from a list?). If I allow the user to play the moves themselves, instead of picking the moves from a list, there may need to be a way to detect legal/illegal moves, which becomes yet another task to handle. 
+Potential difficulties with this approach include transpositions (where the same position arises from different move orders), which would cause issues with my data structure. Also, making the chessboard itself respond to user input in a way that feels natural may be difficult to do (clicking and dragging pieces? clicking piece to move and destination square? selecting a move from a list?). If I allow the user to play the moves themselves, instead of picking the moves from a list, there may need to be a way to detect legal/illegal moves, which becomes yet another task to handle. Integrating [stockfish] may require me to design some interface from my representation of the chessboard to something the engine can understand. On the other hand, it is written in C++ which makes things slightly easier. 
