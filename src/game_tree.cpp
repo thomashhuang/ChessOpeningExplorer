@@ -8,19 +8,20 @@
 #include "game_tree.h"
 
 using namespace pgn;
+using namespace chess;
 
-chess::GameTree::TreeNode::TreeNode() : ply_(Ply()), white_wins_(0), black_wins_(0), draws_(0) {
-  next_moves_ = new std::map<std::string, chess::GameTree::TreeNode*>();
+GameTree::TreeNode::TreeNode() : ply_(Ply()), white_wins_(0), black_wins_(0), draws_(0) {
+  next_moves_ = new std::map<std::string, GameTree::TreeNode*>();
 }
 
-chess::GameTree::TreeNode::TreeNode(Ply ply) : ply_(ply), white_wins_(0), black_wins_(0), draws_(0) {
-  next_moves_ = new std::map<std::string, chess::GameTree::TreeNode*>();
+GameTree::TreeNode::TreeNode(Ply ply) : ply_(ply), white_wins_(0), black_wins_(0), draws_(0) {
+  next_moves_ = new std::map<std::string, GameTree::TreeNode*>();
 }
 
-chess::GameTree::TreeNode::TreeNode(const TreeNode& other)
+GameTree::TreeNode::TreeNode(const TreeNode& other)
     : ply_(other.ply_), white_wins_(other.white_wins_), black_wins_(other.black_wins_), draws_(other.draws_), next_moves_(other.next_moves_) {}
 
-chess::GameTree::TreeNode::TreeNode(TreeNode&& other) 
+GameTree::TreeNode::TreeNode(TreeNode&& other) 
     : ply_(other.ply_), white_wins_(other.white_wins_), black_wins_(other.black_wins_), draws_(other.draws_), next_moves_(other.next_moves_) {
   other.white_wins_ = 0;
   other.black_wins_ = 0;
@@ -28,11 +29,11 @@ chess::GameTree::TreeNode::TreeNode(TreeNode&& other)
   other.next_moves_ = nullptr;
   }
 
-chess::GameTree::TreeNode::~TreeNode() {
+GameTree::TreeNode::~TreeNode() {
   clear();
 }
 
-chess::GameTree::TreeNode& chess::GameTree::TreeNode::operator=(const TreeNode& other) {
+GameTree::TreeNode& GameTree::TreeNode::operator=(const TreeNode& other) {
   if (this != &other) {
     clear();
     ply_ = other.ply_;
@@ -44,7 +45,7 @@ chess::GameTree::TreeNode& chess::GameTree::TreeNode::operator=(const TreeNode& 
   return *this;
 }
 
-chess::GameTree::TreeNode& chess::GameTree::TreeNode::operator=(TreeNode&& other) {
+GameTree::TreeNode& GameTree::TreeNode::operator=(TreeNode&& other) {
   if (this != &other) {
     clear();
     ply_ = other.ply_;
@@ -57,21 +58,28 @@ chess::GameTree::TreeNode& chess::GameTree::TreeNode::operator=(TreeNode&& other
   return *this;
 }
 
-void chess::GameTree::TreeNode::clear() {
+void GameTree::TreeNode::clear() {
   white_wins_ = 0;
   black_wins_ = 0;
   draws_ = 0;
   delete next_moves_;
 }
 
-chess::GameTree::TreeNode* chess::GameTree::TreeNode::NextPosition(const Ply& ply) {
+GameTree::TreeNode* GameTree::TreeNode::NextPosition(const Ply& ply) {
   if (next_moves_->find(ply.str()) == next_moves_->end()) { // Haven't seen this move before
-    next_moves_->emplace(ply.str(), new chess::GameTree::TreeNode(ply));
+    next_moves_->emplace(ply.str(), new GameTree::TreeNode(ply));
   }
   return (*next_moves_)[ply.str()];
 }
 
-void chess::GameTree::TreeNode::UpdateWins(GameResult result) {
+GameTree::TreeNode* GameTree::TreeNode::PlayMove(const std::string& ply) {
+  if (next_moves_->find(ply) != next_moves_->end()) {
+    return next_moves_->at(ply);
+  }
+  return nullptr;
+}
+
+void GameTree::TreeNode::UpdateWins(GameResult result) {
   if (result.isWhiteWin()) {
     white_wins_++;
   } else if (result.isBlackWin()) {
@@ -81,14 +89,14 @@ void chess::GameTree::TreeNode::UpdateWins(GameResult result) {
   }
 }
 
-chess::GameTree::GameTree(GameCollection& games) {
+GameTree::GameTree(GameCollection& games) {
   root_ = new TreeNode();
   for (GameCollection::iterator it = games.begin(); it != games.end(); it++) {
     AddGame(*it);
   }
 }
 
-chess::GameTree::GameTree(std::ifstream pgn_file) {
+GameTree::GameTree(std::ifstream& pgn_file) {
   root_ = new TreeNode();
   GameCollection collection;
   pgn_file >> collection;
@@ -98,12 +106,12 @@ chess::GameTree::GameTree(std::ifstream pgn_file) {
   }
 }
 
-void chess::GameTree::AddGame(const Game& game) {
+void GameTree::AddGame(const Game& game) {
   games_++;
   GameResult result = game.result();
   root_->UpdateWins(result);
 
-  chess::GameTree::TreeNode* current = root_;
+  GameTree::TreeNode* current = root_;
   MoveList moves = game.moves();
 
   for (MoveList::iterator it = moves.begin(); it != moves.end(); it++) {
@@ -119,3 +127,6 @@ void chess::GameTree::AddGame(const Game& game) {
   }
 }
 
+size_t GameTree::size() const {
+  return games_;
+}

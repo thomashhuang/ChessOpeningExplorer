@@ -31,22 +31,30 @@ namespace chess {
         /* Find the child of this node given a ply. Adds to next_moves_ if necessary */
         TreeNode* NextPosition(const pgn::Ply& ply);
 
+        /* Play a move and go down the tree. Returns a nullptr if this move has not been seen before */
+        TreeNode* PlayMove(const std::string& move);
+
+        /* Update the results of this TreeNode */
         void UpdateWins(pgn::GameResult result);
 
+        /* Clear all data in this node and its children */
         void clear();
 
       };
       TreeNode* root_;
-      unsigned games_;
+      size_t games_;
 
       /* Initialize the tree with a PNGGameCollection */
       GameTree(pgn::GameCollection& games);
 
       /* Initialize the tree with an input stream to a pgn file */
-      GameTree(std::ifstream pgn_file);
+      GameTree(std::ifstream& pgn_file);
 
       /* Add a single game to this Tree, updating all fields. */
       void AddGame(const pgn::Game& game);
+
+      /* Get the number of games in this tree. */
+      size_t size() const;
 
 
   };
