@@ -72,13 +72,6 @@ GameTree::TreeNode* GameTree::TreeNode::NextPosition(const Ply& ply) {
   return (*next_moves_)[ply.str()];
 }
 
-GameTree::TreeNode* GameTree::TreeNode::PlayMove(const std::string& ply) {
-  if (next_moves_->find(ply) != next_moves_->end()) {
-    return next_moves_->at(ply);
-  }
-  return nullptr;
-}
-
 void GameTree::TreeNode::UpdateWins(GameResult result) {
   if (result.isWhiteWin()) {
     white_wins_++;

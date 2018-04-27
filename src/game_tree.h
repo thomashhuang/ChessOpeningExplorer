@@ -37,9 +37,6 @@ namespace chess {
         TreeNode& operator=(const TreeNode& other);
         TreeNode& operator=(TreeNode&& other);
 
-        /* Play a move and go down the tree. Returns a nullptr if this move has not been seen before */
-        TreeNode* PlayMove(const std::string& move);
-
         /* Update the results of this TreeNode */
         void UpdateWins(pgn::GameResult result);
 
