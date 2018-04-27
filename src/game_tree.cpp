@@ -1,4 +1,5 @@
 #include <map>
+#include <iostream>
 #include <fstream>
 #include <PGNPly.h>
 #include <PGNMove.h>
@@ -82,14 +83,14 @@ void GameTree::TreeNode::UpdateWins(GameResult result) {
   }
 }
 
-GameTree::GameTree(GameCollection& games) {
+GameTree::GameTree(GameCollection& games) : games_(0) {
   root_ = new TreeNode();
   for (GameCollection::iterator it = games.begin(); it != games.end(); it++) {
     AddGame(*it);
   }
 }
 
-GameTree::GameTree(std::ifstream& pgn_file) {
+GameTree::GameTree(std::ifstream& pgn_file) : games_(0) {
   root_ = new TreeNode();
   GameCollection collection;
   pgn_file >> collection;

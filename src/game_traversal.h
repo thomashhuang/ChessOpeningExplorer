@@ -20,6 +20,9 @@ namespace chess {
       /* Play a move. Returns false if the ply is not in the tree */
       bool push_back(pgn::Ply ply);
 
+      /* Play a move with a string representation. Like above */
+      bool push_back(std::string ply);
+
       /* Go back a ply in the traversal. */
       void pop_back();
 

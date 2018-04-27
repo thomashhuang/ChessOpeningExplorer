@@ -20,6 +20,11 @@ bool GameTraversal::push_back(Ply ply) {
   return false;
 }
 
+bool GameTraversal::push_back(std::string ply) {
+  Ply p(ply);
+  return push_back(p);
+}
+
 void GameTraversal::pop_back() {
   if (previous_nodes_.size() > 0) {
     current_ = previous_nodes_[previous_nodes_.size() - 1];

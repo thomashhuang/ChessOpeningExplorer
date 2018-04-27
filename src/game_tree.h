@@ -10,8 +10,6 @@
 #include <PGNGameResult.h>
 #include <PGNGame.h>
 
-#include "game_traversal.h"
-
 namespace chess {
   class GameTree {
 
