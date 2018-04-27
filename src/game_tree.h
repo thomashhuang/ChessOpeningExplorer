@@ -1,13 +1,22 @@
+#ifndef GAME_TREE_H
+#define GAME_TREE_H
+
 #include <vector>
 #include <map>
+
 #include <PGNPly.h>
 #include <PGNMove.h>
 #include <PGNGameCollection.h>
 #include <PGNGameResult.h>
 #include <PGNGame.h>
 
+#include "game_traversal.h"
+
 namespace chess {
   class GameTree {
+
+    friend class GameTraversal;
+
     private:
       struct TreeNode {
         /* The ply that this TreeNode represents */
@@ -28,14 +37,14 @@ namespace chess {
         TreeNode& operator=(const TreeNode& other);
         TreeNode& operator=(TreeNode&& other);
 
-        /* Find the child of this node given a ply. Adds to next_moves_ if necessary */
-        TreeNode* NextPosition(const pgn::Ply& ply);
-
         /* Play a move and go down the tree. Returns a nullptr if this move has not been seen before */
         TreeNode* PlayMove(const std::string& move);
 
         /* Update the results of this TreeNode */
         void UpdateWins(pgn::GameResult result);
+
+        /* Find the child of this node given a ply. Adds to next_moves_ if necessary */
+        TreeNode* NextPosition(const pgn::Ply& ply);
 
         /* Clear all data in this node and its children */
         void clear();
@@ -44,6 +53,7 @@ namespace chess {
       TreeNode* root_;
       size_t games_;
 
+    public:
       /* Initialize the tree with a PNGGameCollection */
       GameTree(pgn::GameCollection& games);
 
@@ -59,3 +69,5 @@ namespace chess {
 
   };
 }
+
+#endif
