@@ -32,8 +32,20 @@ void GameTraversal::pop_back() {
   }
 }
 
+size_t GameTraversal::size() {
+  return current_->white_wins_ + current_->black_wins_ + current_->draws_;
+}
+
 Ply GameTraversal::operator*() {
   return current_->ply_;
+}
+
+std::vector<std::string> GameTraversal::GetContinuations() {
+  std::vector<std::string> continuations;
+  for (auto it = current_->next_moves_->begin(); it != current_->next_moves_->end(); it++) {
+    continuations.push_back(it->first);
+  }
+  return continuations;
 }
 
 unsigned GameTraversal::GetWhiteWins() {

@@ -26,6 +26,12 @@ namespace chess {
       /* Go back a ply in the traversal. */
       void pop_back();
 
+      /* Get the number of games at this position. */
+      size_t size();
+
+      /* Get all known responses to the current move. */
+      std::vector<std::string> GetContinuations();
+
       /* Get the current ply. */
       pgn::Ply operator*();
 
