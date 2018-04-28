@@ -17,7 +17,7 @@ RM = rm -f
 CXX = g++
 CXXFLAGS = -std=c++11 -stdlib=libc++ -c -g -O0 -Wall -Wextra -Wc++11-extensions -pedantic
 LD = g++
-LDFLAGS = -I../lib/pgnlib-0.2.5/include/
+LDFLAGS = 
 
 all : $(EXE)
 
