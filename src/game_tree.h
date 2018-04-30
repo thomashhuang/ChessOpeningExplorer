@@ -9,6 +9,7 @@
 #include <PGNGameCollection.h>
 #include <PGNGameResult.h>
 #include <PGNGame.h>
+#include <PGNPosition.h>
 
 namespace chess {
   class GameTree {
@@ -19,6 +20,8 @@ namespace chess {
       struct TreeNode {
         /* The ply that this TreeNode represents */
         pgn::Ply ply_;
+        /* The current position */
+        pgn::Position position_;
         unsigned white_wins_;
         unsigned black_wins_;
         unsigned draws_;
@@ -26,7 +29,7 @@ namespace chess {
         std::map<std::string, TreeNode*>* next_moves_;
 
         TreeNode();
-        TreeNode(pgn::Ply ply);
+        TreeNode(pgn::Ply ply, pgn::Position position);
 
         //Rule of 5
         TreeNode(const TreeNode& other);
@@ -39,7 +42,7 @@ namespace chess {
         void UpdateWins(pgn::GameResult result);
 
         /* Find the child of this node given a ply. Adds to next_moves_ if necessary */
-        TreeNode* NextPosition(const pgn::Ply& ply);
+        TreeNode* NextPosition(pgn::Ply& ply, pgn::Position& position);
 
         /* Clear all data in this node and its children */
         void clear();

@@ -6,16 +6,17 @@
 #include <PGNMoveList.h>
 #include <PGNGame.h>
 #include <PGNGameCollection.h>
+#include <PGNPosition.h>
 #include "game_tree.h"
 
 using namespace pgn;
 using namespace chess;
 
-GameTree::TreeNode::TreeNode() : ply_(Ply()), white_wins_(0), black_wins_(0), draws_(0) {
+GameTree::TreeNode::TreeNode() : ply_(Ply()), position_(Position()), white_wins_(0), black_wins_(0), draws_(0) {
   next_moves_ = new std::map<std::string, GameTree::TreeNode*>();
 }
 
-GameTree::TreeNode::TreeNode(Ply ply) : ply_(ply), white_wins_(0), black_wins_(0), draws_(0) {
+GameTree::TreeNode::TreeNode(Ply ply, Position position) : ply_(ply), position_(position), white_wins_(0), black_wins_(0), draws_(0) {
   next_moves_ = new std::map<std::string, GameTree::TreeNode*>();
 }
 
@@ -66,9 +67,9 @@ void GameTree::TreeNode::clear() {
   delete next_moves_;
 }
 
-GameTree::TreeNode* GameTree::TreeNode::NextPosition(const Ply& ply) {
+GameTree::TreeNode* GameTree::TreeNode::NextPosition(Ply& ply, Position& position) {
   if (next_moves_->find(ply.str()) == next_moves_->end()) { // Haven't seen this move before
-    next_moves_->emplace(ply.str(), new GameTree::TreeNode(ply));
+    next_moves_->emplace(ply.str(), new GameTree::TreeNode(ply, position));
   }
   return (*next_moves_)[ply.str()];
 }
@@ -107,16 +108,19 @@ void GameTree::AddGame(const Game& game) {
 
   GameTree::TreeNode* current = root_;
   MoveList moves = game.moves();
+  Position position;
 
   for (MoveList::iterator it = moves.begin(); it != moves.end(); it++) {
     //Parse white's move.
     Ply white_ply = it->white();
-    current = current->NextPosition(white_ply);
+    position.update(white_ply);
+    current = current->NextPosition(white_ply, position);
     current->UpdateWins(result);
 
     //Parse black's move.
     Ply black_ply = it->black();
-    current = current->NextPosition(black_ply);
+    position.update(black_ply);
+    current = current->NextPosition(black_ply, position);
     current->UpdateWins(result);
   }
 }

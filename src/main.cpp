@@ -1,6 +1,9 @@
 #include <fstream>
 #include <iostream>
 #include <PGNGameCollection.h>
+#include <PGNPly.h>
+#include <PGNSquare.h>
+#include <PGNPosition.h>
 
 #include "game_tree.h"
 #include "game_traversal.h"
@@ -13,11 +16,11 @@ int main() {
   GameCollection games;
 
   try {
-    std::ifstream caruana("games/caruana.pgn");
+    std::ifstream game("games/sample.pgn");
 
-    caruana >> games;
+    game >> games;
 
-    caruana.close();
+    game.close();
   }
   catch (std::exception& e) {
     return -1;
@@ -27,15 +30,12 @@ int main() {
 
   GameTraversal t(*tree);
 
-  std::cout << "Caruana games: Results white black draw" << std::endl;
-  std::cout << t.GetWhiteWins() << " " << t.GetBlackWins() << " " << t.GetDraws() << std::endl;
+  t.push_back("d4");
 
-  t.push_back("e4");
-  t.push_back("e5");
+  Position p = t.GetPosition();
+  std::cout << p.fen() << std::endl;
 
-  std::cout << "After 1.e4 e5" << std::endl;
-  std::cout << t.GetWhiteWins() << " " << t.GetBlackWins() << " " << t.GetDraws() << std::endl;
-  
+
   delete tree;
 
   return 0;

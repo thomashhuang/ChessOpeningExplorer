@@ -1,5 +1,6 @@
 #include <vector>
 #include <PGNPly.h>
+#include <PGNPosition.h>
 
 #include "game_traversal.h"
 #include "game_tree.h"
@@ -46,6 +47,14 @@ std::vector<std::string> GameTraversal::GetContinuations() {
     continuations.push_back(it->first);
   }
   return continuations;
+}
+
+Ply GameTraversal::GetPly() {
+  return current_->ply_;
+}
+
+Position GameTraversal::GetPosition() {
+  return current_->position_;
 }
 
 unsigned GameTraversal::GetWhiteWins() {

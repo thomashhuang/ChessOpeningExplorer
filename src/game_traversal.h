@@ -32,6 +32,12 @@ namespace chess {
       /* Get all known responses to the current move. */
       std::vector<std::string> GetContinuations();
 
+      /* Get the ply object for the current node. */
+      pgn::Ply GetPly();
+
+      /* Get the position object for the current node. */
+      pgn::Position GetPosition();
+
       /* Get the current ply. */
       pgn::Ply operator*();
 
