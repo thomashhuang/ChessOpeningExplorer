@@ -42,7 +42,7 @@ namespace chess {
         void UpdateWins(pgn::GameResult result);
 
         /* Find the child of this node given a ply. Adds to next_moves_ if necessary */
-        TreeNode* NextPosition(pgn::Ply& ply, pgn::Position& position);
+        TreeNode* NextPosition(const pgn::Ply& ply, const pgn::Position& position);
 
         /* Clear all data in this node and its children */
         void clear();

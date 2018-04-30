@@ -106,3 +106,13 @@ TEST_CASE("GameTraversal::traverse_with_pop_back_incorrect") {
   trav.pop_back();
   REQUIRE(!trav.push_back("d5"));
 }
+
+TEST_CASE("GameTraversal::get_position_fen_notation") {
+  std::ifstream s("games/sample.pgn");
+  GameTree t(s);
+  GameTraversal trav(t);
+  REQUIRE(trav.push_back("d4"));
+  std::string fen_position = trav.GetPosition().fen();
+  std::string board_state = fen_position.substr(0, fen_position.find(' '));
+  REQUIRE(board_state == "rnbqkbnr/pppppppp/8/8/3P4/8/PPP1PPPP/RNBQKBNR");
+}

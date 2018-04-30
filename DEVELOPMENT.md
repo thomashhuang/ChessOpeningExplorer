@@ -8,3 +8,5 @@ Memory may still be leaking, need to look into cleaning that up and implementing
 4. Tests have been added to make sure the tree is being constructed as expected and game counts/results are all correct.
 
 5. Added a Position field to the TreeNodes, so the nodes now keep track of the current position. This should simplify drawing the position in the app, and communication through FEN notation should work well.
+
+6. Position field in TreeNodes is now tested, fixed a bug where Positions were not updating properly.

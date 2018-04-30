@@ -1,7 +1,7 @@
 MODULE_SRC= example_1.cpp
 MODULE_OBJ= example_1.o
 MODULE_TARGET= example_1
-MODULE_INCS= -I../include/
+MODULE_INCS= -I ../include/
 CCFLAGS= -ansi -pedantic -Wall -g -c
 LDFLAGS= -g -o
 

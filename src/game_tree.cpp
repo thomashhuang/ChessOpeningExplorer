@@ -67,7 +67,7 @@ void GameTree::TreeNode::clear() {
   delete next_moves_;
 }
 
-GameTree::TreeNode* GameTree::TreeNode::NextPosition(Ply& ply, Position& position) {
+GameTree::TreeNode* GameTree::TreeNode::NextPosition(const Ply& ply, const Position& position) {
   if (next_moves_->find(ply.str()) == next_moves_->end()) { // Haven't seen this move before
     next_moves_->emplace(ply.str(), new GameTree::TreeNode(ply, position));
   }
@@ -119,6 +119,9 @@ void GameTree::AddGame(const Game& game) {
 
     //Parse black's move.
     Ply black_ply = it->black();
+    if (black_ply.piece().letter() == '0') { // Game ended before black made their move.
+      return;
+    }
     position.update(black_ply);
     current = current->NextPosition(black_ply, position);
     current->UpdateWins(result);
