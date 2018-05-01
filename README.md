@@ -16,3 +16,6 @@ This holds the internal structure that keeps track of all the positions, games, 
   
 #### GameTraversal:  
 Used to traverse through the GameTree. It is constructed with a GameTree object and uses the method push_back(Ply) to traverse through the "database" represented by the GameTree. It also supports going back up the tree using pop_back().  
+
+#### Communication:
+UI and Model communicate through the GameTraversal, which will get continuations using GetContinuations, and will send the position to the UI using a pgn::Position object. The UI converts the Position object to FEN notation and draws the board from that.
