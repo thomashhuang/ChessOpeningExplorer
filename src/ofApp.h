@@ -1,51 +1,54 @@
 
 #pragma once
 
+#include <map>
+#include <PGNPosition.h>
+#include "game_tree.h"
 #include "ofMain.h"
 #include "ofImage.h"
 
 class ofApp : public ofBaseApp{
   
   private:
-    /** 
-     * Black pieces are capital letters, white pieces are lower case.
-     * Note that the dimensions are flipped, b5 corresponds to [5][2]
-     */
-    char board_[8][8] = {
-      {'R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R'},
-      {'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'},
-      {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
-      {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
-      {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
-      {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
-      {'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'},
-      {'r', 'n', 'b', 'q', 'k', 'b', 'n', 'r'}
-    };
 
-    /* Images of the pieces */
+    /**
+     * Images of the pieces
+     * The names of these variables match FEN notation.
+     * Capital letters are white pieces, lower case are black.
+     */
     ofImage p;
     ofImage r;
-    ofImage k;
+    ofImage n;
     ofImage b;
     ofImage q;
     ofImage k;
     ofImage P;
     ofImage R;
-    ofImage K;
+    ofImage N;
     ofImage B;
     ofImage Q;
     ofImage K;
-    ofImage lightSquare;
-    ofImage darkSquare;
+    ofImage light_square;
+    ofImage dark_square;
+    
+    std::map<std::string, ofImage> piece_map;
 
+    chess::GameTree* tree;
 
-    void buildImageMap();
+    void BuildImageMap();
+    
+    /* Draw the squares */
+    void DrawBoard();
+    
+    /* Draw the pieces on the board */
+  void DrawPosition(pgn::Position position);
 
 	public:
 		void setup();
 		void update();
 		void draw();
 
+  /*
 		void keyPressed(int key);
 		void keyReleased(int key);
 		void mouseMoved(int x, int y );
@@ -57,5 +60,6 @@ class ofApp : public ofBaseApp{
 		void windowResized(int w, int h);
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
+   */
 };
 

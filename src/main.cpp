@@ -7,12 +7,18 @@
 
 #include "game_tree.h"
 #include "game_traversal.h"
+#include "ofApp.h"
+#include "ofMain.h"
+
+
 
 using namespace pgn;
 using namespace chess;
 
 int main() {
 
+  ofSetupOpenGL(1024, 768, OF_WINDOW);
+  /*
   GameCollection games;
 
   try {
@@ -37,6 +43,8 @@ int main() {
 
 
   delete tree;
+   */
+  ofRunApp(new ofApp());
 
   return 0;
   
