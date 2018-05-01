@@ -30,8 +30,12 @@ class ofApp : public ofBaseApp{
     ofImage K;
     ofImage light_square;
     ofImage dark_square;
+
+    ofSoundPlayer move;
+    ofSoundPlayer capture;
+    ofSoundPlayer check;
     
-    std::map<std::string, ofImage> piece_map;
+    std::map<char, ofImage> piece_map;
 
     chess::GameTree* tree;
 
