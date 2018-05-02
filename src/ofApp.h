@@ -45,6 +45,8 @@ class ofApp : public ofBaseApp {
     
     chess::GameTraversal* trav_;
     
+    ofxDatGuiLabel* panel_tooltip_;
+    
     ofxDatGui* move_panel_;
     
     ofxDatGui* move_list_;

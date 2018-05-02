@@ -13,6 +13,8 @@
 #define BOARD_TOP_LEFT_X 50
 #define BOARD_TOP_LEFT_Y 50
 #define SQUARE_SIZE 60
+#define PANEL_TOP_LEFT_X 600
+#define PANEL_TOP_LEFT_Y 100
 
 using namespace chess;
 using namespace pgn;
@@ -103,18 +105,30 @@ void ofApp::DrawPosition(pgn::Position position) {
 }
 
 void ofApp::SetUpMovePanel() {
-    move_panel_ = new ofxDatGui(700, BOARD_TOP_LEFT_Y);
+  
+  move_panel_ = new ofxDatGui(PANEL_TOP_LEFT_X, PANEL_TOP_LEFT_Y);
+  
+  move_panel_->addButton("back");
     
-    std::vector<std::string> continuations = trav_->GetContinuations();
-    for (std::string move : continuations) {
-      move_panel_->addButton(move);
-    }
-    move_panel_->onButtonEvent(this, &ofApp::MoveClick);
+  std::vector<std::string> continuations = trav_->GetContinuations();
+  
+  for (std::string move : continuations) {
+    GameTraversal::Results r = trav_->GetResults(move);
+    std::ostringstream label_stream;
+    label_stream << move << " | " << r.games << " | " << r.white_pct << "% | " << r.draw_pct << "% | " << r.black_pct << "%";
+    move_panel_->addButton(label_stream.str());
+  }
+
+  move_panel_->onButtonEvent(this, &ofApp::MoveClick);
 }
 
 void ofApp::MoveClick(ofxDatGuiButtonEvent e) {
   std::string label = e.target->getLabel();
-  trav_->push_back(label);
+  if (label == "back") {
+    trav_->pop_back();
+  } else {
+    trav_->push_back(label.substr(0, label.find('|') - 1));
+  }
   SetUpMovePanel();
 }
 
@@ -131,13 +145,12 @@ void ofApp::setup() {
   LoadPieces();
   BuildImageMap();
   
-  std::ifstream game_stream("../../../data/games/Caruana.pgn");
+  std::ifstream game_stream("../../../data/games/Carlsen.pgn");
   
   
   tree_ = new GameTree(game_stream);
   trav_ = new GameTraversal(*tree_);
-    
-  move_panel_ = new ofxDatGui(700, BOARD_TOP_LEFT_Y);
+  
   SetUpMovePanel();
 }
 

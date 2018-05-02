@@ -2,6 +2,7 @@
 #define GAME_TRAVERSAL_H
 
 #include <vector>
+#include <cmath>
 
 #include <PGNPly.h>
 
@@ -14,6 +15,22 @@ namespace chess {
       std::vector<GameTree::TreeNode*> previous_nodes_;
 
     public:
+
+      struct Results {
+        unsigned white_wins;
+        unsigned black_wins;
+        unsigned draws;
+        unsigned games;
+        double white_pct;
+        double black_pct;
+        double draw_pct;
+        Results(unsigned white, unsigned black, unsigned draws) 
+          : white_wins(white), black_wins(black), draws(draws), games(white + black + draws) {
+            white_pct = float(white) / games * 100;
+            black_pct = float(black) / games * 100;
+            draw_pct = float(draws) / games * 100;
+          }
+      };
 
       GameTraversal(GameTree& tree);
 
@@ -48,6 +65,9 @@ namespace chess {
       unsigned GetBlackWins();
 
       unsigned GetDraws();
+
+      /* Get a results object for a continuation from this position */
+      Results GetResults(std::string ply);
   };
 }
 

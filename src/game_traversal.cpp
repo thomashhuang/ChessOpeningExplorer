@@ -76,3 +76,12 @@ unsigned GameTraversal::GetBlackWins() {
 unsigned GameTraversal::GetDraws() {
   return current_->draws_;
 }
+
+GameTraversal::Results GameTraversal::GetResults(std::string ply) {
+  if (!push_back(ply)) {
+    return Results(0, 0, 0);
+  }
+  Results r(GetWhiteWins(), GetBlackWins(), GetDraws());
+  pop_back();
+  return r;
+}
