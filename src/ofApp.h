@@ -45,9 +45,14 @@ class ofApp : public ofBaseApp {
     
     chess::GameTraversal* trav_;
     
+    /* Gui containing current position's statistics and continuations. */
     ofxDatGui* move_panel_;
     
-    ofxDatGui* move_list_;
+    /* Gui containing notes controls */
+    ofxDatGui* notes_;
+    
+    /* Gui containing main notes pane */
+    ofxDatGui* notes_pane_;
 
     /* Build the map from character representing the piece to the piece image */
     void BuildImageMap();
@@ -62,11 +67,16 @@ class ofApp : public ofBaseApp {
     void DrawPosition(pgn::Position position);
     
     /* Get the continuations in the current position and create the GUI */
-    void SetUpMovePanel();
+    void DrawMovePanel();
+    
+    void CreateNotesPanel();
     
     void MoveClick(ofxDatGuiDropdownEvent e);
     
     void BackClick(ofxDatGuiButtonEvent e);
+    
+    /* Get the text from the note and note_name text fields and save to bin/data/notes/file */
+    void SaveNote(ofxDatGuiButtonEvent e);
 
 	public:
 		void setup();

@@ -9,13 +9,15 @@
 #include "game_traversal.h"
 #include "ofApp.h"
 #include "ofxGui.h"
-#include "gui_theme.h"
+#include "gui_themes.h"
 
 #define BOARD_TOP_LEFT_X 50
 #define BOARD_TOP_LEFT_Y 50
 #define SQUARE_SIZE 60
 #define PANEL_TOP_LEFT_X 600
-#define PANEL_TOP_LEFT_Y 100
+#define PANEL_TOP_LEFT_Y 50
+#define NOTES_TOP_LEFT_X 50
+#define NOTES_TOP_LEFT_Y 550
 
 using namespace chess;
 using namespace pgn;
@@ -105,11 +107,12 @@ void ofApp::DrawPosition(pgn::Position position) {
   }
 }
 
-void ofApp::SetUpMovePanel() {
+void ofApp::DrawMovePanel() {
   move_panel_ = new ofxDatGui(PANEL_TOP_LEFT_X, PANEL_TOP_LEFT_Y);
   
-  move_panel_->setTheme(new MyGuiTheme());
+  move_panel_->setTheme(new MovePanelTheme());
   
+  // Back button and continuation parsing.
   move_panel_->addButton("back");
   
   move_panel_->addBreak()->setHeight(15.0f);
@@ -125,6 +128,7 @@ void ofApp::SetUpMovePanel() {
     button_labels.push_back(label_stream.str());
   }
   
+  // Dropdown panel for continuations.
   move_panel_->addDropdown("Moves | Games | White Wins | Draws | Black Wins", button_labels);
   
   move_panel_->onDropdownEvent(this, &ofApp::MoveClick);
@@ -134,7 +138,7 @@ void ofApp::SetUpMovePanel() {
   
   move_panel_->addBreak()->setHeight(15.0f);
   
-  //Add labels for current positions results:
+  // Add labels for current positions results:
   std::stringstream games_message;
   games_message << "Games: " << current_position_results.games;
   move_panel_->addLabel(games_message.str());
@@ -153,6 +157,22 @@ void ofApp::SetUpMovePanel() {
 
 }
 
+void ofApp::CreateNotesPanel() {
+  notes_ = new ofxDatGui(NOTES_TOP_LEFT_X, NOTES_TOP_LEFT_Y);
+  notes_->setTheme(new FolderTheme());
+  
+  notes_->addButton("Save Note");
+  notes_->addTextInput("Note Name:");
+  
+  notes_pane_ = new ofxDatGui(NOTES_TOP_LEFT_X, NOTES_TOP_LEFT_Y + 50);
+  notes_pane_->setTheme(new LargeTextInputTheme());
+  notes_pane_->addTextInput("Notes:");
+  
+  notes_->onButtonEvent(this, &ofApp::SaveNote);
+}
+
+/* EVENT METHODS */
+
 void ofApp::MoveClick(ofxDatGuiDropdownEvent e) {
   std::string label = e.target->getLabel();
   trav_->push_back(label.substr(0, label.find('|') - 1));
@@ -168,11 +188,34 @@ void ofApp::MoveClick(ofxDatGuiDropdownEvent e) {
     move.play();
   }
   
-  SetUpMovePanel();
+  DrawMovePanel();
 }
 
 void ofApp::BackClick(ofxDatGuiButtonEvent e) {
-  trav_->pop_back();
+  std::cout << "clicked back" << std::endl;
+  if (e.target->getLabel() == "back") {
+    trav_->pop_back();
+    DrawMovePanel();
+  }
+}
+
+void ofApp::SaveNote(ofxDatGuiButtonEvent e) {
+  if (e.target->getLabel() == "Save Note") {
+    std::string note_name = notes_->getTextInput("Note Name:")->getText();
+    std::string note = notes_pane_->getTextInput("Notes:")->getText();
+  
+    if (note_name != "" && note != "") {
+      std::string path_to_file = "../../../data/notes/" + note_name;
+      std::ofstream f(path_to_file);
+      //Write movelist?...
+      f << note << std::endl;
+    
+      // clear the text inputs
+      notes_->getTextInput("Note Name:")->setText("");
+      notes_pane_->getTextInput("Notes:")->setText("");
+      f.close();
+    }
+  }
 }
 
 //--------------------------------------------------------------
@@ -194,7 +237,10 @@ void ofApp::setup() {
   tree_ = new GameTree(game_stream);
   trav_ = new GameTraversal(*tree_);
   
-  SetUpMovePanel();
+  
+  CreateNotesPanel();
+  
+  DrawMovePanel();
 }
 
 //--------------------------------------------------------------

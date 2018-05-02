@@ -105,7 +105,7 @@
 		E4B6FCAD0C3E899E008CF71C /* openFrameworks-Info.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.plist.xml; path = "openFrameworks-Info.plist"; sourceTree = "<group>"; };
 		E4EB691F138AFCF100A09F29 /* CoreOF.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = CoreOF.xcconfig; path = ../../../libs/openFrameworksCompiled/project/osx/CoreOF.xcconfig; sourceTree = SOURCE_ROOT; };
 		E4EB6923138AFD0F00A09F29 /* Project.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Project.xcconfig; sourceTree = "<group>"; };
-		E933F568209A433F00008EF0 /* gui_theme.h */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.c.h; path = gui_theme.h; sourceTree = "<group>"; tabWidth = 2; };
+		E933F568209A433F00008EF0 /* gui_themes.h */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.c.h; path = gui_themes.h; sourceTree = "<group>"; tabWidth = 2; };
 		E95560EB20995844006A84FD /* lib */ = {isa = PBXFileReference; lastKnownFileType = folder; path = lib; sourceTree = "<group>"; };
 		E95560ED209989D4006A84FD /* bin */ = {isa = PBXFileReference; lastKnownFileType = folder; path = bin; sourceTree = "<group>"; };
 		ECF8674C7975F1063C5E30CA /* ofxGuiGroup.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxGuiGroup.cpp; path = ../../../addons/ofxGui/src/ofxGuiGroup.cpp; sourceTree = SOURCE_ROOT; };
@@ -272,7 +272,7 @@
 				9C2CB39A1580CCD82D62FA97 /* game_tree.h */,
 				2387C5E4ACE977CA38B97C40 /* game_traversal.cpp */,
 				1DC58219053CDD06F0C27DB3 /* game_tree.cpp */,
-				E933F568209A433F00008EF0 /* gui_theme.h */,
+				E933F568209A433F00008EF0 /* gui_themes.h */,
 			);
 			path = src;
 			sourceTree = SOURCE_ROOT;
