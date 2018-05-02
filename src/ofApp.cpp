@@ -156,6 +156,18 @@ void ofApp::SetUpMovePanel() {
 void ofApp::MoveClick(ofxDatGuiDropdownEvent e) {
   std::string label = e.target->getLabel();
   trav_->push_back(label.substr(0, label.find('|') - 1));
+  
+  //Sounds when a move is clicked
+  if (label.find('+') != label.npos || label.find('#') != label.npos) { // check or checkmate
+    check.play();
+    
+  } else if (label.find('x') != label.npos) { // capture
+    capture.play();
+    
+  } else { // regular move
+    move.play();
+  }
+  
   SetUpMovePanel();
 }
 
