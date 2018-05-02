@@ -50,9 +50,6 @@ class ofApp : public ofBaseApp {
     
     /* Gui containing notes controls */
     ofxDatGui* notes_;
-    
-    /* Gui containing main notes pane */
-    ofxDatGui* notes_pane_;
 
     /* Build the map from character representing the piece to the piece image */
     void BuildImageMap();

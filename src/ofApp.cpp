@@ -17,7 +17,7 @@
 #define PANEL_TOP_LEFT_X 600
 #define PANEL_TOP_LEFT_Y 50
 #define NOTES_TOP_LEFT_X 50
-#define NOTES_TOP_LEFT_Y 550
+#define NOTES_TOP_LEFT_Y 600
 
 using namespace chess;
 using namespace pgn;
@@ -108,6 +108,10 @@ void ofApp::DrawPosition(pgn::Position position) {
 }
 
 void ofApp::DrawMovePanel() {
+  if (move_panel_ != nullptr) {
+    move_panel_->setVisible(false);
+  }
+  
   move_panel_ = new ofxDatGui(PANEL_TOP_LEFT_X, PANEL_TOP_LEFT_Y);
   
   move_panel_->setTheme(new MovePanelTheme());
@@ -159,14 +163,12 @@ void ofApp::DrawMovePanel() {
 
 void ofApp::CreateNotesPanel() {
   notes_ = new ofxDatGui(NOTES_TOP_LEFT_X, NOTES_TOP_LEFT_Y);
-  notes_->setTheme(new FolderTheme());
+  notes_->setTheme(new NotesTheme());
   
   notes_->addButton("Save Note");
   notes_->addTextInput("Note Name:");
   
-  notes_pane_ = new ofxDatGui(NOTES_TOP_LEFT_X, NOTES_TOP_LEFT_Y + 50);
-  notes_pane_->setTheme(new LargeTextInputTheme());
-  notes_pane_->addTextInput("Notes:");
+  notes_->addTextInput("Notes:");
   
   notes_->onButtonEvent(this, &ofApp::SaveNote);
 }
@@ -177,7 +179,7 @@ void ofApp::MoveClick(ofxDatGuiDropdownEvent e) {
   std::string label = e.target->getLabel();
   trav_->push_back(label.substr(0, label.find('|') - 1));
   
-  //Sounds when a move is clicked
+  // Sounds when a move is clicked
   if (label.find('+') != label.npos || label.find('#') != label.npos) { // check or checkmate
     check.play();
     
@@ -192,7 +194,6 @@ void ofApp::MoveClick(ofxDatGuiDropdownEvent e) {
 }
 
 void ofApp::BackClick(ofxDatGuiButtonEvent e) {
-  std::cout << "clicked back" << std::endl;
   if (e.target->getLabel() == "back") {
     trav_->pop_back();
     DrawMovePanel();
@@ -202,7 +203,7 @@ void ofApp::BackClick(ofxDatGuiButtonEvent e) {
 void ofApp::SaveNote(ofxDatGuiButtonEvent e) {
   if (e.target->getLabel() == "Save Note") {
     std::string note_name = notes_->getTextInput("Note Name:")->getText();
-    std::string note = notes_pane_->getTextInput("Notes:")->getText();
+    std::string note = notes_->getTextInput("Notes:")->getText();
   
     if (note_name != "" && note != "") {
       std::string path_to_file = "../../../data/notes/" + note_name;
@@ -212,7 +213,7 @@ void ofApp::SaveNote(ofxDatGuiButtonEvent e) {
     
       // clear the text inputs
       notes_->getTextInput("Note Name:")->setText("");
-      notes_pane_->getTextInput("Notes:")->setText("");
+      notes_->getTextInput("Notes:")->setText("");
       f.close();
     }
   }

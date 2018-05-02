@@ -21,21 +21,11 @@ class MovePanelTheme : public ofxDatGuiTheme {
     }
 };
 
-class FolderTheme : public ofxDatGuiTheme {
+class NotesTheme : public ofxDatGuiTheme {
   public:
-    FolderTheme() {
+    NotesTheme() {
       font.size = 8;
       layout.width = 480.0f;
-      init();
-    }
-};
-
-class LargeTextInputTheme : public ofxDatGuiTheme {
-  public:
-    LargeTextInputTheme() {
-      font.size = 8;
-      layout.width = 480.0f;
-      layout.height = 100.0f;
       init();
     }
 };
