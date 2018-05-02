@@ -2,6 +2,7 @@
 This is an OpenFrameworks application to analyze and review chess openings and player repertoire.
 
 [pgnlib]: http://pgnlib.sourceforge.net/ "pgnlib"
+[ofxDatGui]: https://github.com/braitsch/ofxDatGui "ofxDatGui"
 
 ## Libraries
 [pgnlib] is used to import PGN files into memory, and the internal game tree data structure will organize the games in a way that can easily be traversed.
@@ -9,6 +10,11 @@ To install pgnlib, you will need to run the following in the pgnlib directory:
 > ./configure  
 > make  
 > make install  
+
+[ofxDatGui] is used for several UI elements.
+To install ofxDatGui, clone the repo into your openFrameworks/addons directory, then copy the ofxbraitsch directory into bin/data. Run the project generator with ofxDatGui selected as an addon, then simply add:  
+> #include "ofxDatGui.h"  
+to ofApp.h.
 
 ## Classes
 #### GameTree:  
