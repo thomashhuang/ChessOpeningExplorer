@@ -2,12 +2,16 @@
 #pragma once
 
 #include <map>
+
 #include <PGNPosition.h>
+
 #include "game_tree.h"
+#include "game_traversal.h"
 #include "ofMain.h"
 #include "ofImage.h"
+#include "ofxDatGui.h"
 
-class ofApp : public ofBaseApp{
+class ofApp : public ofBaseApp {
   
   private:
 
@@ -35,11 +39,21 @@ class ofApp : public ofBaseApp{
     ofSoundPlayer capture;
     ofSoundPlayer check;
     
-    std::map<char, ofImage> piece_map;
+    std::map<char, ofImage> piece_map_;
 
-    chess::GameTree* tree;
+    chess::GameTree* tree_;
+    
+    chess::GameTraversal* trav_;
+    
+    ofxDatGui* move_panel_;
+    
+    ofxDatGui* move_list_;
 
+    /* Build the map from character representing the piece to the piece image */
     void BuildImageMap();
+    
+    /* Load the images of the pieces */
+    void LoadPieces();
     
     /* Draw the squares */
     void DrawBoard();

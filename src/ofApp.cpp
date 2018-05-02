@@ -1,6 +1,12 @@
 #include <map>
-#include <PGNPosition.h>
 #include <iostream>
+#include <fstream>
+
+#include <PGNPosition.h>
+#include <PGNPly.h>
+
+#include "game_tree.h"
+#include "game_traversal.h"
 #include "ofApp.h"
 #include "ofxGui.h"
 
@@ -8,9 +14,37 @@
 #define BOARD_TOP_LEFT_Y 50
 #define SQUARE_SIZE 60
 
+using namespace chess;
+using namespace pgn;
 
 void ofApp::BuildImageMap() {
+  piece_map_.emplace('p', p);
+  piece_map_.emplace('r', r);
+  piece_map_.emplace('n', n);
+  piece_map_.emplace('b', b);
+  piece_map_.emplace('q', q);
+  piece_map_.emplace('k', k);
+  piece_map_.emplace('P', P);
+  piece_map_.emplace('R', R);
+  piece_map_.emplace('N', P);
+  piece_map_.emplace('B', B);
+  piece_map_.emplace('Q', Q);
+  piece_map_.emplace('K', K);
+}
 
+void ofApp::LoadPieces() {
+  p.load("icons/bp.png");
+  r.load("icons/br.png");
+  n.load("icons/bn.png");
+  b.load("icons/bb.png");
+  q.load("icons/bq.png");
+  k.load("icons/bk.png");
+  P.load("icons/wp.png");
+  R.load("icons/wr.png");
+  N.load("icons/wn.png");
+  B.load("icons/wb.png");
+  Q.load("icons/wq.png");
+  K.load("icons/wk.png");
 }
 
 void ofApp::DrawBoard() {
@@ -61,7 +95,7 @@ void ofApp::DrawPosition(pgn::Position position) {
       int x = BOARD_TOP_LEFT_X + (x_square * SQUARE_SIZE);
 
       if (piece_grid[x_square][y_square] != ' ') { // skip empty squares
-        ofImage piece = piece_map.at(piece_grid[x_square][y_square]); // image of the piece.
+        ofImage piece = piece_map_.at(piece_grid[x_square][y_square]); // image of the piece.
         piece.draw(x, y, SQUARE_SIZE, SQUARE_SIZE);
       }
     }
@@ -70,37 +104,22 @@ void ofApp::DrawPosition(pgn::Position position) {
 
 //--------------------------------------------------------------
 void ofApp::setup() {
-  p.load("bp.png");
-  r.load("br.png");
-  n.load("bn.png");
-  b.load("bb.png");
-  q.load("bq.png");
-  k.load("bk.png");
-  P.load("wp.png");
-  R.load("wr.png");
-  N.load("wn.png");
-  B.load("wb.png");
-  Q.load("wq.png");
-  K.load("wk.png");
-  light_square.load("l.jpg");
-  dark_square.load("d.png");
 
-  move.load("move.wav");
-  check.load("check.wav");
-  capture.load("capture.mp3");
+  light_square.load("icons/l.jpg");
+  dark_square.load("icons/d.png");
+
+  move.load("sounds/move.wav");
+  check.load("sounds/check.wav");
+  capture.load("sounds/capture.mp3");
   
-  piece_map.emplace('p', p);
-  piece_map.emplace('r', r);
-  piece_map.emplace('n', n);
-  piece_map.emplace('b', b);
-  piece_map.emplace('q', q);
-  piece_map.emplace('k', k);
-  piece_map.emplace('P', P);
-  piece_map.emplace('R', R);
-  piece_map.emplace('N', P);
-  piece_map.emplace('B', B);
-  piece_map.emplace('Q', Q);
-  piece_map.emplace('K', K);
+  LoadPieces();
+  BuildImageMap();
+  
+  std::ifstream game_stream("games/Carlsen.pgn");
+  
+  tree_ = new GameTree(game_stream);
+  trav_ = new GameTraversal(*tree_);
+  game_stream.close();
 }
 
 //--------------------------------------------------------------
