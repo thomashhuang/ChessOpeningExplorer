@@ -57,6 +57,14 @@ Position GameTraversal::GetPosition() {
   return current_->position_;
 }
 
+std::vector<std::string> GameTraversal::GetMoveList() {
+    std::vector<std::string> move_list;
+    for (GameTree::TreeNode* node : previous_nodes_) {
+        move_list.push_back(node->ply_.str());
+    }
+    return move_list;
+}
+
 unsigned GameTraversal::GetWhiteWins() {
   return current_->white_wins_;
 }

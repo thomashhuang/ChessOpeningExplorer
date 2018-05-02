@@ -59,7 +59,12 @@ class ofApp : public ofBaseApp {
     void DrawBoard();
     
     /* Draw the pieces on the board */
-  void DrawPosition(pgn::Position position);
+    void DrawPosition(pgn::Position position);
+    
+    /* Get the continuations in the current position and create the GUI */
+    void SetUpMovePanel();
+    
+    void MoveClick(ofxDatGuiButtonEvent e);
 
 	public:
 		void setup();

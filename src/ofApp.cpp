@@ -26,7 +26,7 @@ void ofApp::BuildImageMap() {
   piece_map_.emplace('k', k);
   piece_map_.emplace('P', P);
   piece_map_.emplace('R', R);
-  piece_map_.emplace('N', P);
+  piece_map_.emplace('N', N);
   piece_map_.emplace('B', B);
   piece_map_.emplace('Q', Q);
   piece_map_.emplace('K', K);
@@ -102,6 +102,22 @@ void ofApp::DrawPosition(pgn::Position position) {
   }
 }
 
+void ofApp::SetUpMovePanel() {
+    move_panel_ = new ofxDatGui(700, BOARD_TOP_LEFT_Y);
+    
+    std::vector<std::string> continuations = trav_->GetContinuations();
+    for (std::string move : continuations) {
+      move_panel_->addButton(move);
+    }
+    move_panel_->onButtonEvent(this, &ofApp::MoveClick);
+}
+
+void ofApp::MoveClick(ofxDatGuiButtonEvent e) {
+  std::string label = e.target->getLabel();
+  trav_->push_back(label);
+  SetUpMovePanel();
+}
+
 //--------------------------------------------------------------
 void ofApp::setup() {
 
@@ -115,22 +131,25 @@ void ofApp::setup() {
   LoadPieces();
   BuildImageMap();
   
-  std::ifstream game_stream("games/Carlsen.pgn");
+  std::ifstream game_stream("../../../data/games/Caruana.pgn");
+  
   
   tree_ = new GameTree(game_stream);
   trav_ = new GameTraversal(*tree_);
-  game_stream.close();
+    
+  move_panel_ = new ofxDatGui(700, BOARD_TOP_LEFT_Y);
+  SetUpMovePanel();
 }
 
 //--------------------------------------------------------------
-void ofApp::update(){
+void ofApp::update() {
+  draw();
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
   DrawBoard();
-  pgn::Position p;
-  DrawPosition(p);
+  DrawPosition(trav_->GetPosition());
 }
 
 /*

@@ -37,6 +37,8 @@ namespace chess {
 
       /* Get the position object for the current node. */
       pgn::Position GetPosition();
+      
+      std::vector<std::string> GetMoveList();
 
       /* Get the current ply. */
       pgn::Ply operator*();
