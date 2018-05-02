@@ -78,7 +78,9 @@ unsigned GameTraversal::GetDraws() {
 }
 
 GameTraversal::Results GameTraversal::GetResults(std::string ply) {
-  if (!push_back(ply)) {
+  if (ply == "") { // Call on current node.
+    return Results(GetWhiteWins(), GetBlackWins(), GetDraws());
+  } else if (!push_back(ply)) {
     return Results(0, 0, 0);
   }
   Results r(GetWhiteWins(), GetBlackWins(), GetDraws());

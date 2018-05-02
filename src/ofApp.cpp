@@ -9,6 +9,7 @@
 #include "game_traversal.h"
 #include "ofApp.h"
 #include "ofxGui.h"
+#include "gui_theme.h"
 
 #define BOARD_TOP_LEFT_X 50
 #define BOARD_TOP_LEFT_Y 50
@@ -105,31 +106,61 @@ void ofApp::DrawPosition(pgn::Position position) {
 }
 
 void ofApp::SetUpMovePanel() {
-  
   move_panel_ = new ofxDatGui(PANEL_TOP_LEFT_X, PANEL_TOP_LEFT_Y);
   
+  move_panel_->setTheme(new MyGuiTheme());
+  
   move_panel_->addButton("back");
+  
+  move_panel_->addBreak()->setHeight(15.0f);
     
   std::vector<std::string> continuations = trav_->GetContinuations();
+  
+  std::vector<std::string> button_labels;
   
   for (std::string move : continuations) {
     GameTraversal::Results r = trav_->GetResults(move);
     std::ostringstream label_stream;
     label_stream << move << " | " << r.games << " | " << r.white_pct << "% | " << r.draw_pct << "% | " << r.black_pct << "%";
-    move_panel_->addButton(label_stream.str());
+    button_labels.push_back(label_stream.str());
   }
+  
+  move_panel_->addDropdown("Moves | Games | White Wins | Draws | Black Wins", button_labels);
+  
+  move_panel_->onDropdownEvent(this, &ofApp::MoveClick);
+  move_panel_->onButtonEvent(this, &ofApp::BackClick);
+  
+  GameTraversal::Results current_position_results = trav_->GetResults("");
+  
+  move_panel_->addBreak()->setHeight(15.0f);
+  
+  //Add labels for current positions results:
+  std::stringstream games_message;
+  games_message << "Games: " << current_position_results.games;
+  move_panel_->addLabel(games_message.str());
+  
+  std::stringstream white_wins_message;
+  white_wins_message << "White Wins: " << current_position_results.white_pct << "%";
+  move_panel_->addLabel(white_wins_message.str());
+  
+  std::stringstream draws_message;
+  draws_message << "Draws: " << current_position_results.draw_pct << "%";
+  move_panel_->addLabel(draws_message.str());
+  
+  std::stringstream black_wins_message;
+  black_wins_message << "Black Wins: " << current_position_results.black_pct << "%";
+  move_panel_->addLabel(black_wins_message.str());
 
-  move_panel_->onButtonEvent(this, &ofApp::MoveClick);
 }
 
-void ofApp::MoveClick(ofxDatGuiButtonEvent e) {
+void ofApp::MoveClick(ofxDatGuiDropdownEvent e) {
   std::string label = e.target->getLabel();
-  if (label == "back") {
-    trav_->pop_back();
-  } else {
-    trav_->push_back(label.substr(0, label.find('|') - 1));
-  }
+  trav_->push_back(label.substr(0, label.find('|') - 1));
   SetUpMovePanel();
+}
+
+void ofApp::BackClick(ofxDatGuiButtonEvent e) {
+  trav_->pop_back();
 }
 
 //--------------------------------------------------------------

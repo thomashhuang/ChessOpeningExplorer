@@ -45,8 +45,6 @@ class ofApp : public ofBaseApp {
     
     chess::GameTraversal* trav_;
     
-    ofxDatGuiLabel* panel_tooltip_;
-    
     ofxDatGui* move_panel_;
     
     ofxDatGui* move_list_;
@@ -66,7 +64,9 @@ class ofApp : public ofBaseApp {
     /* Get the continuations in the current position and create the GUI */
     void SetUpMovePanel();
     
-    void MoveClick(ofxDatGuiButtonEvent e);
+    void MoveClick(ofxDatGuiDropdownEvent e);
+    
+    void BackClick(ofxDatGuiButtonEvent e);
 
 	public:
 		void setup();
