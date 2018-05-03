@@ -14,3 +14,7 @@ Memory may still be leaking, need to look into cleaning that up and implementing
 7. Splitting drawing stage into several parts: DrawBoard, DrawPosition, and DrawButtons. Board simply draws alternating colored squares in an 8x8. Position takes in a pgn::Position object, converts to FEN notation, then draws the pieces onto the board. Buttons will find the continuations in the tree and draw a button for each.
 
 8. Added more UI elements including the current position's statistics and a movelist.
+
+9. Removed the movelist and added a note taking UI. Notes are written to bin/data/{filename} and also write the current movelist.
+
+10. Add an upload UI so the user uploads their own PGN files. Files are searched in bin/data/{filename}.
