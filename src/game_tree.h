@@ -52,6 +52,9 @@ namespace chess {
       size_t games_;
 
     public:
+      
+      /* Create an empty GameTree */
+      GameTree();
 
       /* Initialize the tree with a PNGGameCollection */
       GameTree(pgn::GameCollection& games);

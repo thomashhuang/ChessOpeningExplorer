@@ -30,4 +30,13 @@ class NotesTheme : public ofxDatGuiTheme {
     }
 };
 
+class UploadPanelTheme : public ofxDatGuiTheme {
+  public:
+    UploadPanelTheme() {
+      font.size = 8;
+      layout.width = 375.0f;
+      init();
+    }
+};
+
 #endif /* gui_theme_hpp */

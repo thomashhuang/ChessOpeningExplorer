@@ -3,6 +3,8 @@
 #include <fstream>
 
 #include <PGNPosition.h>
+#include <PGNGameCollection.h>
+#include <PGNGame.h>
 #include <PGNPly.h>
 
 #include "game_tree.h"
@@ -119,6 +121,8 @@ void ofApp::DrawMovePanel() {
   // Back button and continuation parsing.
   move_panel_->addButton("back");
   
+  move_panel_->addButton(("reset"));
+  
   move_panel_->addBreak()->setHeight(15.0f);
     
   std::vector<std::string> continuations = trav_->GetContinuations();
@@ -133,7 +137,8 @@ void ofApp::DrawMovePanel() {
   }
   
   // Dropdown panel for continuations.
-  move_panel_->addDropdown("Moves | Games | White Wins | Draws | Black Wins", button_labels);
+  ofxDatGuiDropdown* moves = move_panel_->addDropdown("Moves | Games | White Wins | Draws | Black Wins", button_labels);
+  moves->expand();
   
   move_panel_->onDropdownEvent(this, &ofApp::MoveClick);
   move_panel_->onButtonEvent(this, &ofApp::BackClick);
@@ -173,6 +178,18 @@ void ofApp::CreateNotesPanel() {
   notes_->onButtonEvent(this, &ofApp::SaveNote);
 }
 
+void ofApp::CreateUploadGamesPanel() {
+  upload_panel_ = new ofxDatGui(PANEL_TOP_LEFT_X, NOTES_TOP_LEFT_Y);
+  upload_panel_->setTheme(new UploadPanelTheme());
+  
+  upload_panel_->addButton("Upload");
+  upload_panel_->addTextInput("data/games/");
+  
+  upload_status_ = upload_panel_->addLabel("No Games Uploaded");
+  
+  upload_panel_->onButtonEvent(this, &ofApp::UploadPGNFile);
+}
+
 /* EVENT METHODS */
 
 void ofApp::MoveClick(ofxDatGuiDropdownEvent e) {
@@ -196,8 +213,12 @@ void ofApp::MoveClick(ofxDatGuiDropdownEvent e) {
 void ofApp::BackClick(ofxDatGuiButtonEvent e) {
   if (e.target->getLabel() == "back") {
     trav_->pop_back();
-    DrawMovePanel();
+
+  } else if (e.target->getLabel() == "reset") {
+    delete trav_;
+    trav_ = new GameTraversal(*tree_ );
   }
+  DrawMovePanel();
 }
 
 void ofApp::SaveNote(ofxDatGuiButtonEvent e) {
@@ -219,6 +240,35 @@ void ofApp::SaveNote(ofxDatGuiButtonEvent e) {
   }
 }
 
+void ofApp::UploadPGNFile(ofxDatGuiButtonEvent e) {
+
+  std::string file_name = upload_panel_->getTextInput("data/games/")->getText();
+
+  std::string path_to_file = "../../../data/games/" + file_name;
+  std::ifstream pgn(path_to_file);
+  
+  GameCollection games;
+  
+  try {
+    pgn >> games;
+
+  } catch (exception& e) {
+    upload_status_->setLabel("Invalid file.");
+    return;
+  }
+  for (GameCollection::iterator it = games.begin(); it != games.end(); it++) {
+    tree_->AddGame(*it);
+  }
+  std::stringstream message;
+  message << "Added " << games.size() << " games.";
+  upload_status_->setLabel(message.str());
+  
+  upload_panel_->getTextInput("data/games/")->setText("");
+  
+  DrawMovePanel();
+  
+}
+
 //--------------------------------------------------------------
 void ofApp::setup() {
 
@@ -232,12 +282,11 @@ void ofApp::setup() {
   LoadPieces();
   BuildImageMap();
   
-  std::ifstream game_stream("../../../data/games/Carlsen.pgn");
-  
-  
-  tree_ = new GameTree(game_stream);
+  tree_ = new GameTree();
   trav_ = new GameTraversal(*tree_);
   
+  
+  CreateUploadGamesPanel();
   
   CreateNotesPanel();
   

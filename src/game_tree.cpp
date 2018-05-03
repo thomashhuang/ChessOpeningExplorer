@@ -84,6 +84,10 @@ void GameTree::TreeNode::UpdateWins(GameResult result) {
   }
 }
 
+GameTree::GameTree() : games_(0) {
+  root_ = new TreeNode();
+}
+
 GameTree::GameTree(GameCollection& games) : games_(0) {
   root_ = new TreeNode();
   for (GameCollection::iterator it = games.begin(); it != games.end(); it++) {

@@ -50,6 +50,11 @@ class ofApp : public ofBaseApp {
     
     /* Gui containing notes controls */
     ofxDatGui* notes_;
+    
+    /* Gui for uploading games to the app */
+    ofxDatGui* upload_panel_;
+    
+    ofxDatGuiLabel* upload_status_;
 
     /* Build the map from character representing the piece to the piece image */
     void BuildImageMap();
@@ -66,14 +71,23 @@ class ofApp : public ofBaseApp {
     /* Get the continuations in the current position and create the GUI */
     void DrawMovePanel();
     
+    /* Create the panel for taking notes */
     void CreateNotesPanel();
     
+    /* Create the panel for uploading games to the app */
+    void CreateUploadGamesPanel();
+    
+    /* Click on a move */
     void MoveClick(ofxDatGuiDropdownEvent e);
     
+    /* Click back or reset */
     void BackClick(ofxDatGuiButtonEvent e);
     
     /* Get the text from the note and note_name text fields and save to bin/data/notes/file */
     void SaveNote(ofxDatGuiButtonEvent e);
+    
+    /* Uplaod a PGN to the game, adding each game to the tree */
+    void UploadPGNFile(ofxDatGuiButtonEvent e);
 
 	public:
 		void setup();
