@@ -225,15 +225,29 @@ void ofApp::SaveNote(ofxDatGuiButtonEvent e) {
   if (e.target->getLabel() == "Save Note") {
     std::string note_name = notes_->getTextInput("Note Name:")->getText();
     std::string note = notes_->getTextInput("Notes:")->getText();
+    
   
     if (note_name != "" && note != "") {
       std::string path_to_file = "../../../data/notes/" + note_name;
-      std::ofstream f(path_to_file);
-      //Write movelist?...
-      f << note << std::endl;
+      std::ofstream f(path_to_file, std::ios_base::app); // append to file
+
+      // write move list
+      std::vector<std::string> move_list = trav_->GetMoveList();
+      int move_number = 0;
+      for (size_t i = 0; i < move_list.size(); i++) {
+        std::cout << move_list[i] << ", ";
+        if (i % 2 == 0) {
+          move_number++;
+          f << move_number << ". ";
+        }
+        f << move_list[i] << " ";
+      }
+      f << std::endl;
+
+      // write note
+      f << note << std::endl << std::endl;
     
-      // clear the text inputs
-      notes_->getTextInput("Note Name:")->setText("");
+      // clear the note text, leave the file name
       notes_->getTextInput("Notes:")->setText("");
       f.close();
     }
@@ -303,60 +317,3 @@ void ofApp::draw(){
   DrawBoard();
   DrawPosition(trav_->GetPosition());
 }
-
-/*
-//--------------------------------------------------------------
-void ofApp::keyPressed(int key){
-
-}
-
-//--------------------------------------------------------------
-void ofApp::keyReleased(int key){
-
-}
-
-//--------------------------------------------------------------
-void ofApp::mouseMoved(int x, int y ){
-
-}
-
-//--------------------------------------------------------------
-void ofApp::mouseDragged(int x, int y, int button){
-
-}
-
-//--------------------------------------------------------------
-void ofApp::mousePressed(int x, int y, int button){
-
-}
-
-//--------------------------------------------------------------
-void ofApp::mouseReleased(int x, int y, int button){
-
-}
-
-//--------------------------------------------------------------
-void ofApp::mouseEntered(int x, int y){
-
-}
-
-//--------------------------------------------------------------
-void ofApp::mouseExited(int x, int y){
-
-}
-
-//--------------------------------------------------------------
-void ofApp::windowResized(int w, int h){
-
-}
-
-//--------------------------------------------------------------
-void ofApp::gotMessage(ofMessage msg){
-
-}
-
-//--------------------------------------------------------------
-void ofApp::dragEvent(ofDragInfo dragInfo){ 
-
-}
-*/
